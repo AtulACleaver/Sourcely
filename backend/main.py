@@ -2,14 +2,17 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
-from extraction import extract_text
-from chunking import chunk_text
-from embeddings import build_index, search_index, load_index
 import logging
 import traceback
-from generation import retrieve_context
 
-# Configure logging
+# my py files
+from extraction import extract_text
+from chunking import chunk_text
+from embeddings import build_index, load_index
+from generation import ask_question
+
+
+# configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -111,17 +114,19 @@ def search(question: str, k: int = 5):
             detail="No index found. Upload a PDF first."
         )
 
-    retrieved = retrieve_context(question, k=k)
-
-    if not retrieved:
+    try:
+        result = ask_question(question, k=k)
+    except ConnectionError as e:
+        raise HTTPException(status_code=503, detail=str(e))
+    except Exception as e:
         raise HTTPException(
-            status_code=404,
-            detail="No results found."
+            status_code=500,
+            detail=f"Error generating answer: {str(e)}"
         )
 
     return {
         "question": question,
-        "answer": None,
-        "citations":[],
-        "retrieved_chunks": retrieved
+        "answer": result["answer"],
+        "citations": result["citations"],
+        "retrieved_chunks": result["retrieved_chunks"]
     }
