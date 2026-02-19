@@ -18,20 +18,19 @@ INDEX_PATH = os.path.join(VECTOR_STORE_DIR, "index.faiss")
 CHUNKS_PATH = os.path.join(VECTOR_STORE_DIR, "chunks.json")
 
 
-    """
-    Sends text to Ollama's local API and gets back an embedding vector.
 
-    Args:
-        text: Any string you want to embed
-        prefix: Task prefix required by nomic-embed-text.
-                Use "search_document: " when embedding chunks (documents).
-                Use "search_query: " when embedding questions (queries).
-                Without these prefixes, all embeddings will be nearly identical
-                and FAISS will just return chunks in order (0, 1, 2...).
+# Sends text to Ollama's local API and gets back an embedding vector.
 
-    Returns:
-        A list of floats (the embedding vector, 768 dimensions for nomic-embed-text)
-    """
+# Args:
+#     text: Any string you want to embed
+#     prefix: Task prefix required by nomic-embed-text.
+#             Use "search_document: " when embedding chunks (documents).
+#             Use "search_query: " when embedding questions (queries).
+#             Without these prefixes, all embeddings will be nearly identical
+#             and FAISS will just return chunks in order (0, 1, 2...).
+
+# Returns:
+#     A list of floats (the embedding vector, 768 dimensions for nomic-embed-text)
 
 def get_embedding(text: str, prefix: str = "") -> list[float]:
 
