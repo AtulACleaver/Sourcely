@@ -7,6 +7,7 @@ from chunking import chunk_text
 from embeddings import build_index, search_index, load_index
 import logging
 import traceback
+from generation import retrieve_context
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -99,19 +100,28 @@ async def upload_pdf(file: UploadFile = File(...)):
     # Takes a question, returns the top-k most similar chunks.
     # This will be replaced by /query in Phase 2 (which adds LLM generation).
 
-@app.post("/search")
+@app.post("/query")
 def search(question: str, k: int = 5):
     
-    results = search_index(question, k=k)
+    index, chunks = load_index()
 
-    if not results:
+    if index is None:
         raise HTTPException(
             status_code=404,
             detail="No index found. Upload a PDF first."
         )
 
+    retrieved = retrieve_context(question, k=k)
+
+    if not retrieved:
+        raise HTTPException(
+            status_code=404,
+            detail="No results found."
+        )
+
     return {
         "question": question,
-        "num_results": len(results),
-        "results": results
+        "answer": None,
+        "citations":[],
+        "retrieved_chunks": retrieved
     }
