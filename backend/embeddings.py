@@ -104,13 +104,14 @@ def build_index(chunks: list[dict]) -> tuple:
     return index, chunks
 
 
-def load_index() -> tuple:
-    """
-    Loads a previously saved FAISS index and chunk metadata from disk.
+# Loads a previously saved FAISS index and chunk metadata from disk.
 
-    Returns:
-        Tuple of (faiss_index, chunks) or (None, None) if no index exists
-    """
+# Returns:
+#     Tuple of (faiss_index, chunks) or (None, None) if no index exists
+
+
+def load_index() -> tuple:
+
     if not os.path.exists(INDEX_PATH) or not os.path.exists(CHUNKS_PATH):
         return None, None
 
