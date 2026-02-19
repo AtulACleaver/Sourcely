@@ -1,0 +1,404 @@
+[
+  {
+    "chunk_id": 0,
+    "text": "Theory of Computation\n(Turing Machines)\nPramod Ganapathi\nDepartment of Computer Science\nState University of New York at Stony Brook\nJanuary 24, 2021",
+    "page_number": 1,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 1,
+    "text": "Contents\nContents\nTuring Machines\nUniversal Turing Machines",
+    "page_number": 2,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 2,
+    "text": "Turing Machines",
+    "page_number": 3,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 3,
+    "text": "What was the aim of Alan Turing?\nTuring\u2019s aim\nDesign a model that is:\nSimple,\nIntuitive,\nGeneric, and\nFormalizes computation performed by a human mind",
+    "page_number": 4,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 4,
+    "text": "How does a human compute?\nWrite input on a paper\nDo the computation (think and write the intermediate results on\nthe paper)\nWrite output on the paper",
+    "page_number": 5,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 5,
+    "text": "How did Turing formalize human computation?\nTuring = Named after Alan Mathison Turing\nMachine = Computing machine\nHuman computation Machine computation\nTape\nTape head\nTransition function",
+    "page_number": 6,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 6,
+    "text": "Diagram of a Turing machine (TM)\nSource: LewisandPapadimitriou. ElementsoftheTheoryofComputation.\nOperation Explanation\nWrite (Optionally) writes a new symbol at the current tape position.\nMove (Optionally) moves either left or right.\nThink (Optionally) changes to a new state.",
+    "page_number": 7,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 7,
+    "text": "Diagram of a Turing machine (TM)\nSource: LewisandPapadimitriou. ElementsoftheTheoryofComputation.\nConcept Meaning\nTape Simulates unlimited sheets of paper for computation.\nTape head Read/write onto a tape cell. Moves left/right.\nStates Simulates states of a human mind.\nInput Finite number of symbols initially on the tape.\nOutput Finite number of symbols finally on the tape.\nComputation State transitions based on rules and input symbols.",
+    "page_number": 8,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 8,
+    "text": "itions based on rules and input symbols.",
+    "page_number": 8,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 9,
+    "text": "What is a Turing machine (TM)?\nDefinition\nA Turing machine (TM) M is a 6-tuple\nM = (Q,\u03a3,\u0393,\u03b4,q ,H), where,\n0\n1. Q: A finite set (set of states).\n2. \u03a3: A finite set (input alphabet). \u03a3 excludes .,(cid:3),\u2190,\u2192.\n3. \u0393: A finite set (tape alphabet).\n\u03a3\u222a{.,(cid:3)} \u2286 \u0393. \u0393 excludes \u2190,\u2192.\n4. \u03b4 :(Q\u2212H)\u00d7\u0393toQ\u00d7(\u0393\u222a{\u2190,\u2192})isthetransitionfunction\nsuch that the tape head never falls off or erases . symbol\n(cid:66) Time (computation)\n5. q : The start state (belongs to Q).\n0\n6. H = {q ,q }: The set of halting states (s",
+    "page_number": 9,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 10,
+    "text": " (computation)\n5. q : The start state (belongs to Q).\n0\n6. H = {q ,q }: The set of halting states (subset of Q).\nacc rej",
+    "page_number": 9,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 11,
+    "text": "Some notes on the Turing machine\nSymbols\n. : Left end symbol\n(cid:3) : Blank symbol\n\u2190,\u2192 : Left and right movement symbols\n\u03a3 : Represents input/output/special symbols\n\u0393 : Represents symbols that can be present on the tape\nTransition\nM never falls off the left end of the tape i.e.,\nwhen the current symbol is ., the tape head has to move right\nM stops when it reaches an accept or a reject state i.e.,\n\u03b4 is not defined for states in H",
+    "page_number": 10,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 12,
+    "text": "\n\u03b4 is not defined for states in H",
+    "page_number": 10,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 13,
+    "text": "Solution\nLanguage recognizers such as DFA\u2019s cannot perform computa-\ntional tasks such as erasing strings.\nSo, no DFA can be used for erasing strings.\nLanguage generators such as CFG\u2019s cannot perform computa-\ntional tasks such as erasing strings.\nSo, no CFG can be used for erasing strings.\nTM\u2019s are more powerful than language recognizers and lan-\nguage generators.\nA TM can be used for erasing strings.\nConstruct TM to erase the input string\nProblem\nConstruct a TM to erase the input string",
+    "page_number": 11,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 14,
+    "text": "gs.\nConstruct TM to erase the input string\nProblem\nConstruct a TM to erase the input string",
+    "page_number": 11,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 15,
+    "text": "Construct TM to erase the input string\nProblem\nConstruct a TM to erase the input string\nSolution\nLanguage recognizers such as DFA\u2019s cannot perform computa-\ntional tasks such as erasing strings.\nSo, no DFA can be used for erasing strings.\nLanguage generators such as CFG\u2019s cannot perform computa-\ntional tasks such as erasing strings.\nSo, no CFG can be used for erasing strings.\nTM\u2019s are more powerful than language recognizers and lan-\nguage generators.\nA TM can be used for erasing strings.",
+    "page_number": 12,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 16,
+    "text": " than language recognizers and lan-\nguage generators.\nA TM can be used for erasing strings.",
+    "page_number": 12,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 17,
+    "text": "Construct TM to erase the input string\nProblem\nConstruct a TM to erase the input string\nSolution (continued)\nTime State Tape\n0 q . a a a (cid:3) \u00b7\u00b7\u00b7\n0\n1 q . a a a (cid:3) \u00b7\u00b7\u00b7\n0\n2 q . (cid:3) a a (cid:3) \u00b7\u00b7\u00b7\n1\n3 q . (cid:3) a a (cid:3) \u00b7\u00b7\u00b7\n0\n4 q . (cid:3) (cid:3) a (cid:3) \u00b7\u00b7\u00b7\n1\n5 q . (cid:3) (cid:3) a (cid:3) \u00b7\u00b7\u00b7\n0\n6 q . (cid:3) (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n1\n7 q . (cid:3) (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n0\n8 q . (cid:3) (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\nh",
+    "page_number": 13,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 18,
+    "text": "\u00b7\u00b7\n0\n8 q . (cid:3) (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\nh",
+    "page_number": 13,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 19,
+    "text": "Construct TM to erase the input string\nProblem\nConstruct a TM to erase the input string\nSolution (continued)\n((cid:3),(cid:3))\n(.,\u2192) (a,(cid:3))\nq q q\n0 1 h\n(a,a),((cid:3),\u2192)\nCurrent symbol (\u0393)\nCurrent state (Q\u2212H) . a (cid:3)\nq (q ,\u2192) (q ,(cid:3)) (q ,(cid:3))\n0 0 1 h\nq \u2212 (q ,a) (q ,\u2192)\n1 0 0",
+    "page_number": 14,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 20,
+    "text": "Construct TM for a regular language\nProblem\nConstruct a DFA that accepts all strings from the language\nL = {strings containing ab or end with ba}\nSolution\nExpression: ((a|b)\u2217ab(a|b)\u2217) | ((a|b)\u2217ba)\nDFA:\na a,b\na b\nstart q q q\n1 2 3\nb\nb a\na\nq q\n4 5\nb",
+    "page_number": 15,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 21,
+    "text": "Construct TM for a regular language\nProblem\nConstruct a Turing machine that accepts all strings from the\nlanguage L = {strings containing ab or end with ba}\nSolution\nq\n0\n(.,\u2192)\n(a,\u2192)\n(a,\u2192) (b,\u2192)\nq q q\n1 2 3\n(b,\u2192) (a,\u2192)\n(b,\u2192) ({(cid:3),a,b},\u2192)\n(a,\u2192) ((cid:3),\u2192)\n(b,\u2192) q q q\n4 5 acc",
+    "page_number": 16,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 22,
+    "text": "Construct TM for a regular language\nProblem\nConstruct a Turing machine that accepts all strings from the\nlanguage L = {strings containing ab or end with ba}\nSolution (continued)\nCurrent symbol (\u0393)\nCurrent state (Q\u2212H) . a b (cid:3)\nq (q ,\u2192) \u2212 \u2212 \u2212\n0 1\nq \u2212 (q ,\u2192) (q ,\u2192) \u2212\n1 2 4\nq \u2212 (q ,\u2192) (q ,\u2192) \u2212\n2 2 3\nq \u2212 (q ,\u2192) (q ,\u2192) (q ,\u2192)\n3 acc acc acc\nq \u2212 (q ,\u2192) (q ,\u2192) \u2212\n4 5 4\nq \u2212 (q ,\u2192) (q ,\u2192) (q ,\u2192)\n5 2 3 acc",
+    "page_number": 17,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 23,
+    "text": "c",
+    "page_number": 17,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 24,
+    "text": "Construct TM for a regular language\nProblem\nConstruct a Turing machine that accepts all strings from the\nlanguage L = {strings containing ab or end with ba}\nSolution (continued)\nTM accepts the string bba because it enters the q state\nacc\nTime State Tape\n0 q . b b a (cid:3) (cid:3) \u00b7\u00b7\u00b7\n0\n1 q . b b a (cid:3) (cid:3) \u00b7\u00b7\u00b7\n1\n2 q . b b a (cid:3) (cid:3) \u00b7\u00b7\u00b7\n4\n3 q . b b a (cid:3) (cid:3) \u00b7\u00b7\u00b7\n4\n4 q . b b a (cid:3) (cid:3) \u00b7\u00b7\u00b7\n5\n5 q . b b a (cid:3) (cid:3) \u00b7\u00b7\u00b7\nacc",
+    "page_number": 18,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 25,
+    "text": "a (cid:3) (cid:3) \u00b7\u00b7\u00b7\n5\n5 q . b b a (cid:3) (cid:3) \u00b7\u00b7\u00b7\nacc",
+    "page_number": 18,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 26,
+    "text": "Construct TM for a regular language\nProblem\nConstruct a Turing machine that accepts all strings from the\nlanguage L = {strings containing ab or end with ba}\nSolution (continued)\nTM rejects the string bbb because it enters the q state\nrej\nTime State Tape\n0 q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n0\n1 q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n1\n2 q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n4\n3 q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n4\n4 q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n4\n5 q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\nrej",
+    "page_number": 19,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 27,
+    "text": "b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n4\n5 q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\nrej",
+    "page_number": 19,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 28,
+    "text": "Construct TM for a regular language\nProblem\nConstruct a Turing machine that accepts all strings from the\nlanguage L = {strings containing ab or end with ba}\nSolution (continued)\nTM accepts the string aabbbbb because it enters the q state\nacc\nUnlike DFA and CFG, a TM can accept a string without scan-\nning the string completely\nTime State Tape\n0 q . a a b b b b b (cid:3) \u00b7\u00b7\u00b7\n0\n1 q . a a b b b b b (cid:3) \u00b7\u00b7\u00b7\n1\n2 q . a a b b b b b (cid:3) \u00b7\u00b7\u00b7\n2\n3 q . b b b b b b b (cid:3) \u00b7\u00b7\u00b7\n2\n4 q . b b a b b b b ",
+    "page_number": 20,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 29,
+    "text": "id:3) \u00b7\u00b7\u00b7\n1\n2 q . a a b b b b b (cid:3) \u00b7\u00b7\u00b7\n2\n3 q . b b b b b b b (cid:3) \u00b7\u00b7\u00b7\n2\n4 q . b b a b b b b (cid:3) \u00b7\u00b7\u00b7\n3\n5 q . b b b b b b b (cid:3) \u00b7\u00b7\u00b7\nacc",
+    "page_number": 20,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 30,
+    "text": "Construct TM for a regular language\nMore problems\nUse the TM to check acceptance of the following strings:\n(cid:15)\naba (cid:66) contains ab and ends with ba\naaa\naab\nbaa",
+    "page_number": 21,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 31,
+    "text": "TM\u2019s with different features\nProblem\nSuppose you have TM\u2019s with the following characteristics.\nWhat are the computational powers of the TM\u2019s?\n\u2190 movement \u2192 movement Write Computational power\n(cid:55) (cid:51) (cid:55) ?\n(cid:51) (cid:51) (cid:55) ?\n(cid:55) (cid:55) (cid:51) ?\n(cid:55) (cid:51) (cid:51) ?\n(cid:51) (cid:51) (cid:51) TM",
+    "page_number": 22,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 32,
+    "text": "Solution\nLanguage recognizers such as DFA\u2019s cannot perform computa-\ntional tasks such as copying strings.\nSo, no DFA can be used for copying strings.\nLanguage generators such as CFG\u2019s cannot perform computa-\ntional tasks such as copying strings.\nSo, no CFG can be used for copying strings.\nTM\u2019s are more powerful than language recognizers and lan-\nguage generators.\nA TM can be used for copying strings.\nConstruct TM for copying strings\nProblem\nConstruct a Turing machine that copies a string from th",
+    "page_number": 23,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 33,
+    "text": "gs.\nConstruct TM for copying strings\nProblem\nConstruct a Turing machine that copies a string from the lan-\nguage L = \u03a3\u2217 where \u03a3 = {a,b}.",
+    "page_number": 23,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 34,
+    "text": "Construct TM for copying strings\nProblem\nConstruct a Turing machine that copies a string from the lan-\nguage L = \u03a3\u2217 where \u03a3 = {a,b}.\nSolution\nLanguage recognizers such as DFA\u2019s cannot perform computa-\ntional tasks such as copying strings.\nSo, no DFA can be used for copying strings.\nLanguage generators such as CFG\u2019s cannot perform computa-\ntional tasks such as copying strings.\nSo, no CFG can be used for copying strings.\nTM\u2019s are more powerful than language recognizers and lan-\nguage generators.\nA",
+    "page_number": 24,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 35,
+    "text": "d for copying strings.\nTM\u2019s are more powerful than language recognizers and lan-\nguage generators.\nA TM can be used for copying strings.",
+    "page_number": 24,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 36,
+    "text": "Construct TM for copying strings\nSolution (continued)\nState Tape\nq . b b a (cid:3) (cid:3) (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n0\nq . b b a # (cid:3) (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n2\nq . b b a # (cid:3) (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n2\nq . 2 b a # (cid:3) (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n5\nq . 2 b a # b (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n6\nq . b b a # b (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n7\nq . b 2 a # b (cid:3) (cid:3) (cid:3) \u00b7\u00b7\u00b7\n5\nq . b 2 a # b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n6\nq . b b a # b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n7\nq . b b 1 # b b (cid:",
+    "page_number": 25,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 37,
+    "text": "\n5\nq . b 2 a # b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n6\nq . b b a # b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n7\nq . b b 1 # b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n4\nq . b b 1 # b b a (cid:3) \u00b7\u00b7\u00b7\n6\nq . b b a # b b a (cid:3) \u00b7\u00b7\u00b7\n7\nq . b b a # b b a (cid:3) \u00b7\u00b7\u00b7\n3\nq . b b a # b b a (cid:3) \u00b7\u00b7\u00b7\nacc",
+    "page_number": 25,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 38,
+    "text": "Construct TM for copying strings\nProblem\nConstruct a Turing machine that copies a string from the lan-\nguage L = \u03a3\u2217 where \u03a3 = {a,b}.\nSolution (continued)\n\u0393 = \u03a3\u222a{.,(cid:3),#,1,2}\nCells with \u201c\u2212\u201d means that the TM terminates in q state\nrej\nCurrent symbol (\u0393)\nState . a b # 1 2 (cid:3)\nq (q ,\u2192) \u2212 \u2212 \u2212 \u2212 \u2212 \u2212\n0 1\nq \u2212 (q ,\u2192) (q ,\u2192) \u2212 \u2212 \u2212 (q ,#)\n1 1 1 2\nq (q ,\u2192) (q ,\u2190) (q ,\u2190) (q ,\u2190) \u2212 \u2212 \u2212\n2 3 2 2 2\nq \u2212 (q ,1) (q ,2) (q ,#) \u2212 \u2212 \u2212\n3 4 5 acc\nq \u2212 (q ,\u2192) (q ,\u2192) (q ,\u2192) (q ,\u2192) \u2212 (q ,a)\n4 4 4 4 4 6\nq \u2212 (q ,\u2192) (q ",
+    "page_number": 26,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 39,
+    "text": "1) (q ,2) (q ,#) \u2212 \u2212 \u2212\n3 4 5 acc\nq \u2212 (q ,\u2192) (q ,\u2192) (q ,\u2192) (q ,\u2192) \u2212 (q ,a)\n4 4 4 4 4 6\nq \u2212 (q ,\u2192) (q ,\u2192) (q ,\u2192) \u2212 (q ,\u2192) (q ,b)\n5 5 5 5 5 6\nq \u2212 (q ,\u2190) (q ,\u2190) (q ,\u2190) (q ,a) (q ,b) \u2212\n6 6 6 6 7 7\nq \u2212 (q ,\u2192) (q ,\u2192) \u2212 \u2212 \u2212 \u2212\n7 3 3",
+    "page_number": 26,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 40,
+    "text": "Construct TM for copying strings\nSolution (continued)\n({a,b},\u2192)\n(.,\u2192) ((cid:3),#)\nq q q ({a,b,#},\u2190)\n0 1 2\n(.,\u2192)\n(#,#)\nq q\n3 acc\n(a,1) (b,2)\n({a,b},\u2192)\n({a,b,#,1},\u2192) q q q ({a,b,#,2},\u2192)\n4 7 5\n(1,a),(2,b)\n((cid:3),a) ((cid:3),b)\nq ({a,b,#},\u2190)\n6",
+    "page_number": 27,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 41,
+    "text": "Construct TM for copying strings\nMore problems\nUse the TM to copy the following strings:\n(cid:15)\na\nb\naab",
+    "page_number": 28,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 42,
+    "text": "Solution\nLanguage A = {abc,aabbcc,aaabbbccc,...}\nNo DFA can accept this language. (cid:66) Use pumping lemma\nNo CFG can accept this language. (cid:66) Use pumping lemma\nA TM accepts this language.\nConstruct TM for accepting L = {anbncn | n \u2265 1}\nProblem\nConstruct a Turing machine to accept all strings from the lan-\nguage L = {anbncn | n \u2265 1}",
+    "page_number": 29,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 43,
+    "text": "Construct TM for accepting L = {anbncn | n \u2265 1}\nProblem\nConstruct a Turing machine to accept all strings from the lan-\nguage L = {anbncn | n \u2265 1}\nSolution\nLanguage A = {abc,aabbcc,aaabbbccc,...}\nNo DFA can accept this language. (cid:66) Use pumping lemma\nNo CFG can accept this language. (cid:66) Use pumping lemma\nA TM accepts this language.",
+    "page_number": 30,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 44,
+    "text": "Construct TM for accepting L = {anbncn | n \u2265 1}\nProblem\nConstruct a Turing machine to accept all strings from the lan-\nguage L = {anbncn | n \u2265 1}\nSolution (continued)\nState Tape\nq . a a b b c c (cid:3) \u00b7\u00b7\u00b7\n0\nq . x a b b c c (cid:3) \u00b7\u00b7\u00b7\n2\nq . x a y b c c (cid:3) \u00b7\u00b7\u00b7\n3\nq . x a y b z c (cid:3) \u00b7\u00b7\u00b7\n4\nq . x x y b z c (cid:3) \u00b7\u00b7\u00b7\n2\nq . x x y y z c (cid:3) \u00b7\u00b7\u00b7\n3\nq . x x y y z z (cid:3) \u00b7\u00b7\u00b7\n4\nq . x x y y z z (cid:3) \u00b7\u00b7\u00b7\n5\nq . x x y y z z (cid:3) \u00b7\u00b7\u00b7\nacc",
+    "page_number": 31,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 45,
+    "text": "z z (cid:3) \u00b7\u00b7\u00b7\n5\nq . x x y y z z (cid:3) \u00b7\u00b7\u00b7\nacc",
+    "page_number": 31,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 46,
+    "text": "Construct TM for accepting L = {anbncn | n \u2265 1}\nProblem\nConstruct a Turing machine to accept all strings from the lan-\nguage L = {anbncn | n \u2265 1}\nSolution (continued)\n\u0393 = \u03a3\u222a{.,(cid:3),x,y,z}\nCells with \u201c\u2212\u201d means that the TM terminates in q state\nrej\nCurrent symbol (\u0393)\nSt. . a b c x y z (cid:3)\nq (q ,\u2192) \u2212 \u2212 \u2212 \u2212 \u2212 \u2212 \u2212\n0 1\nq \u2212 (q ,x) \u2212 \u2212 \u2212 (q ,\u2192) \u2212 \u2212\n1 2 5\nq \u2212 (q ,\u2192) (q ,y) \u2212 (q ,\u2192) (q ,\u2192) \u2212 \u2212\n2 2 3 2 2\nq \u2212 \u2212 (q ,\u2192) (q ,z) \u2212 (q ,\u2192) (q ,\u2192) \u2212\n3 3 4 3 3\nq \u2212 (q ,\u2190) (q ,\u2190) \u2212 (q ,\u2192) (q ,\u2190) (q ,\u2190) \u2212\n4 4 4",
+    "page_number": 32,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 47,
+    "text": "2 2\nq \u2212 \u2212 (q ,\u2192) (q ,z) \u2212 (q ,\u2192) (q ,\u2192) \u2212\n3 3 4 3 3\nq \u2212 (q ,\u2190) (q ,\u2190) \u2212 (q ,\u2192) (q ,\u2190) (q ,\u2190) \u2212\n4 4 4 1 4 4\nq \u2212 \u2212 \u2212 \u2212 \u2212 (q ,\u2192) (q ,\u2192) (q ,(cid:3))\n5 5 5 acc",
+    "page_number": 32,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 48,
+    "text": "Construct TM for accepting L = {anbncn | n \u2265 1}\nProblem\nConstruct a Turing machine to accept all strings from the lan-\nguage L = {anbncn | n \u2265 1}\nSolution (continued)\n({a,x,y},\u2192) ({b,y,z},\u2192)\n(.,\u2192) (a,x) (b,y)\nq q q q\n0 1 2 3\n(y,\u2192) (c,z)\n(x,\u2192)\nq q q\nacc 5 4\n((cid:3),(cid:3))\n({y,z},\u2192) ({a,b,y,z},\u2190)",
+    "page_number": 33,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 49,
+    "text": "Construct TM for accepting L = {anbncn | n \u2265 1}\nMore problems\nUse the TM to check acceptance of the following strings:\nabc, aa, c, abbc, aabc, abcc, (cid:15).\nConstruct a TM that accepts language L = {anbncn | n \u2265 0}.",
+    "page_number": 34,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 50,
+    "text": "How are TM\u2019s different from DFA\u2019s and PDA\u2019s?\nFeature DFA PDA TM\nMemory size Finite Infinite Infinite\nHalts? (cid:51) (cid:51) (cid:51), (cid:55)\nInput scanning Left-to-right Left-to-right Arbitrary\n#Passes 1 pass 1 pass Any\nHalting Endofinput Endofinput Acceptstate\nComputing power Least Medium Highest\nLanguage recognizer? (cid:51) (cid:51) (cid:51)\nFunction calculator? (cid:55) (cid:55) (cid:51)\nDecide RL\u2019s? (cid:51) (cid:51) (cid:51)\nDecide CFL\u2019s? (cid:55) (cid:51) (cid:51)\nDecide REL\u2019s? (cid:5",
+    "page_number": 35,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 51,
+    "text": "ecide RL\u2019s? (cid:51) (cid:51) (cid:51)\nDecide CFL\u2019s? (cid:55) (cid:51) (cid:51)\nDecide REL\u2019s? (cid:55) (cid:55) (cid:51)",
+    "page_number": 35,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 52,
+    "text": "What is a computation?\nExample computation of a TM M\nTime Configuration State Tape\n0 C q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n0 0\n1 C q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n1 1\n2 C q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n2 4\n3 C q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n3 4\n4 C q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n4 4\n5 C q . b b b (cid:3) (cid:3) \u00b7\u00b7\u00b7\n5 rej\nConfigurations: Information about the current state, tape head\nposition, and the tape content. e.g.: (q ,.bbb(cid:3))\n4\nC ,C ,C ,C ,C ,C\n0 1 2 3 4 5\nStarting, accepting, rejecting, haltin",
+    "page_number": 36,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 53,
+    "text": "ontent. e.g.: (q ,.bbb(cid:3))\n4\nC ,C ,C ,C ,C ,C\n0 1 2 3 4 5\nStarting, accepting, rejecting, halting configurations\nComputation: Sequence of successive configurations\nC \u2018 C \u2018 C \u2018 C \u2018 C \u2018 C\n0 M 1 M 2 M 3 M 4 M 5\nComputation time/length: 5, written as C \u20185 C\n0 M 5\nYields: e.g.: C \u2018\u2217 C\n1 M 4",
+    "page_number": 36,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 54,
+    "text": "Let\u2019s think!\nDeep problems\nHow does a computer really work?\nSequence of computer states, i.e., a computation.\nHow does a human brain really work?\nThe brain consists of, say, 86 billion neurons. Each neuron\nmight temporarily store some information. Each neuron is con-\nnected to, say, 10,000 neurons. So, there might be 860 trillion\nneural connections. Suppose we represent the brain using a\ndynamic graph. Then, the human thinking and the human ex-\nperience might just be sequences of configurations ",
+    "page_number": 37,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 55,
+    "text": "raph. Then, the human thinking and the human ex-\nperience might just be sequences of configurations of neurons,\ni.e., a giant computation.\nHow does the universe really work?\nThe number of atoms in the observable universe is, say, 1080\nin a higher dimensional space. The number of types of atoms\nmight be finite. An atom moves from one point in space to an-\nother. Then, the happenings in the observe universe might just\nbe a sequence of configurations, i.e., a gigantic computation.",
+    "page_number": 37,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 56,
+    "text": "universe might just\nbe a sequence of configurations, i.e., a gigantic computation.",
+    "page_number": 37,
+    "start_char": 800
+  },
+  {
+    "chunk_id": 57,
+    "text": "Let\u2019s think!\nDeep problems\nSuppose the workings of computers, human brains, and the\nobservable universe is really a computation. What does that\nmean?\nWe can simulate them on a real computer, if we have enough\nresources such as memory and processing power.\nWhat is the biggest assumption when we defined a Turing ma-\nchine?\nFiniteness\nWhat happens when we move out of this assumption?\n?",
+    "page_number": 38,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 58,
+    "text": "How to construct complicated TM\u2019s?\nConstructing complicated TM\u2019s\nWe can make complicated TM\u2019s from simpler TM\u2019s using the\nstructure of a finite automaton\nNodes of the automaton are the simpler TM\u2019s\nk\nA connection M \u2212\u2192 M means when TM M halts and the\ni j i\ncurrent tape symbol is k, then TM M can start.\nj\na\nstart M M\n1 2\nb\nM\n3\nCan you think of some examples of complicated TM\u2019s built from\nsimpler TM\u2019s?",
+    "page_number": 39,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 59,
+    "text": "s?",
+    "page_number": 39,
+    "start_char": 400
+  },
+  {
+    "chunk_id": 60,
+    "text": "Universal Turing Machines",
+    "page_number": 40,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 61,
+    "text": "Universal Turing machine (UTM)\nDefinition\nA Universal Turing machine (UTM) MU can simulate the ex-\necution of any Turing machine M on any input w.\nWorking of UTM U(hM,wi)\nHalt iff M halts on input w.\nIf M is a deciding/semideciding machine, then\nIf M accepts, accept.\nIf M rejects, reject.\nIf M computes a function, then U(hM,wi) must equal M(w).",
+    "page_number": 41,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 62,
+    "text": "Simulating a TM\nTheorem\nGivenanyTuringmachineM andaninputstringw,thereexists\na Turing machine M0 that simulates the execution of M on w\nand\nHalts iff M halts on w, and\nIf it halts, returns whatever result M returns.",
+    "page_number": 42,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 63,
+    "text": "Solution\nNo! (cid:66) Why?\nNo! (cid:66) Why?\nUniversal machines\nProblem\nWe can construct a universal TM that accepts the language\nL = {hM,wi | M is a TM and w \u2208 L(M)}\nCan we construct a universal DFA that accepts the language\nL = {hM,wi | M is a DFA and w \u2208 L(M)}?\nCan we construct a universal CFG that accepts the language\nL = {hM,wi | M is a CFG and w \u2208 L(M)}?",
+    "page_number": 43,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 64,
+    "text": "Universal machines\nProblem\nWe can construct a universal TM that accepts the language\nL = {hM,wi | M is a TM and w \u2208 L(M)}\nCan we construct a universal DFA that accepts the language\nL = {hM,wi | M is a DFA and w \u2208 L(M)}?\nCan we construct a universal CFG that accepts the language\nL = {hM,wi | M is a CFG and w \u2208 L(M)}?\nSolution\nNo! (cid:66) Why?\nNo! (cid:66) Why?",
+    "page_number": 44,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 65,
+    "text": "Solution\nYes! (cid:66) How?\nCompilers\nProblem\nSuppose you discover a new programming language X. You\nwanttowriteandcompileyourfirstprograminX. Ofcourse,a\ncompilerforX isnotavailableasitisanewlanguagediscovered\nby you. You know that you can use C++ or Java to write your\ncompiler. But, is it possible to write your compiler in X that\ncan be used to compile your program written in X?",
+    "page_number": 45,
+    "start_char": 0
+  },
+  {
+    "chunk_id": 66,
+    "text": "Compilers\nProblem\nSuppose you discover a new programming language X. You\nwanttowriteandcompileyourfirstprograminX. Ofcourse,a\ncompilerforX isnotavailableasitisanewlanguagediscovered\nby you. You know that you can use C++ or Java to write your\ncompiler. But, is it possible to write your compiler in X that\ncan be used to compile your program written in X?\nSolution\nYes! (cid:66) How?",
+    "page_number": 46,
+    "start_char": 0
+  }
+]

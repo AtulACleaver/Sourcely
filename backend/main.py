@@ -3,6 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
 from extraction import extract_text
+from chunking import chunk_text
+from embeddings import build_index, search_index, load_index
+import logging
+import traceback
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 
 app = FastAPI(title="Sourcely API")
@@ -22,6 +30,13 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 def health():
     return {"message": "Sourcely is running!!"}
 
+@app.get("/status")
+def status():    
+    index, chunks = load_index()
+    return {
+        "index_loaded": index is not None,
+        "num_chunks": len(chunks) if chunks else 0
+    }
 
 # workflow
 """
@@ -36,26 +51,67 @@ def health():
 
 @app.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):
-    # Check if the file is a PDF
-    if not file.filename.endswith(".pdf"):
-        raise HTTPException(status_code=400, detail="Only PDF files are allowed!!")
+    try:
+        # Check if the file is a PDF
+        if not file.filename.endswith(".pdf"):
+            raise HTTPException(status_code=400, detail="Only PDF files are allowed!!")
+        
+        # Save the PDF file
+        file_path = os.path.join(UPLOAD_DIR, file.filename)
+        logger.info(f"Saving uploaded file to {file_path}")
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        logger.info(f"Extracting text from {file_path}")
+        pages = extract_text(file_path)
+
+        if not pages:
+            raise HTTPException(
+                status_code=400,
+                detail="No text found in the PDF. This pdf might be scanned/image pdf!"
+            )
+
+        # chunking the text
+        logger.info(f"Chunking {len(pages)} pages")
+        chunks = chunk_text(pages, chunk_size=500, overlap=100)
+
+        #  Embed and store in FAISS
+        logger.info(f"Building index for {len(chunks)} chunks")
+        build_index(chunks)
+        
+        return {"filename": file.filename,
+                "status": "uploaded & chunked",
+                "num_pages_extracted": len(pages),
+                "num_chunks": len(chunks),
+                "sample_chunks": chunks[:3], # checking frst 3 chunks
+                "preview": pages[0]["text"][:500],
+        }
+    except HTTPException as he:
+        # Re-raise HTTPExceptions as-is
+        raise he
+    except Exception as e:
+        logger.error(f"Error during /upload: {str(e)}")
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+
+
+    # Temporary search endpoint for testing.
+    # Takes a question, returns the top-k most similar chunks.
+    # This will be replaced by /query in Phase 2 (which adds LLM generation).
+
+@app.post("/search")
+def search(question: str, k: int = 5):
     
-    # Save the PDF file
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    results = search_index(question, k=k)
 
-    pages = extract_text(file_path)
-
-    if not pages:
+    if not results:
         raise HTTPException(
-            status_code=400,
-            detail="No text found in the PDF. This pdf might be scanned/image pdf!"
+            status_code=404,
+            detail="No index found. Upload a PDF first."
         )
-    
-    return {"filename": file.filename,
-            "status": "uploaded",
-            "num_pages_extracted": len(pages),
-            "preview": pages[0]["text"][:500],
-            "pages": pages
+
+    return {
+        "question": question,
+        "num_results": len(results),
+        "results": results
     }
