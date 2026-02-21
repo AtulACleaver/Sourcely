@@ -106,4 +106,4 @@ def ask_question(question: str, k: int = 5) -> dict:
         "answer": answer,
         "citations": citations,
         "retrieved_chunks": retrieved
-    }ww
+    }

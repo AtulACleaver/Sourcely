@@ -1,4 +1,4 @@
-w# ⚙️ Sourcely Backend
+# ⚙️ Sourcely Backend
 
 FastAPI server for document processing and RAG-based questioning.
 

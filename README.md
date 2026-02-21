@@ -18,41 +18,22 @@ An AI-powered research assistant that allows users to upload PDF documents and a
 ## 🏗️ Architecture Overview
 
 ```mermaid
-flowchart TB
-    subgraph Frontend["React + Vite (Port 5173)"]
-        A["FileUpload.jsx"] --> B["api/client.js (Axios)"]
-        C["ChatInput.jsx"] --> B
-        B --> D["AnswerDisplay.jsx"]
+lowchart LR
+    subgraph Frontend["React + Vite (5173)"]
+        A["Upload PDF"] --> B["Axios Client"]
+        C["Ask Question"] --> B
     end
-    
-    subgraph Backend["FastAPI (Port 8000)"]
-        E["/upload endpoint"] --> F["extraction.py"]
-        F --> G["chunking.py"]
-        G --> H["embeddings.py"]
-        I["/query endpoint"] --> J["FAISS Search"]
-        J --> K["Prompt Builder"]
-        K --> L["LLM Generation"]
+
+    subgraph Backend["FastAPI (8000)"]
+        D["Extract + Chunk"] --> E["Embed (Ollama)"]
+        E --> F["FAISS Index"]
+        F --> G["Build Prompt"]
+        G --> H["LLM Answer"]
     end
-    
-    subgraph Storage["Local Storage"]
-        M["uploads/ (PDFs)"]
-        N["vector_store/ (FAISS + JSON)"]
-    end
-    
-    subgraph Models["AI Models"]
-        O["Ollama: nomic-embed-text"]
-        P["Ollama: llama3"]
-        Q["OpenAI (optional upgrade)"]
-    end
-    
-    B -->|"HTTP requests"| E
-    B -->|"HTTP requests"| I
-    H --> N
-    H --> O
-    L --> P
-    L -.->|"later"| Q
-    E --> M
-    J --> N
+
+    B -->|"/upload"| D
+    B -->|"/query"| F
+    H -->|"Answer + Citations"| B
 ```
 
 ## 🚀 Getting Started

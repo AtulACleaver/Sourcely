@@ -53,4 +53,4 @@ export default function StatusBar() {
       )}
     </div>
   )
-}w
+}
