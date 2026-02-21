@@ -47,3 +47,18 @@ FastAPI server for document processing and RAG-based questioning.
 - `POST /upload`: upload and index a pdf.
 - `POST /query`: ask questions about indexed documents.
 - `GET /status`: check the current index state.
+
+## 📁 Project Structure
+
+```text
+backend/
+├── main.py             # fastapi entry point & routes
+├── extraction.py       # pdf text extraction logic
+├── chunking.py         # text segmentation strategies
+├── embeddings.py       # faiss index & embedding utilities
+├── generation.py       # rag logic & llm interaction
+├── requirements.txt    # python dependencies
+├── .env                # environment variables (local only)
+├── uploads/            # temporary storage for pdfs
+└── vector_store/       # faiss index & chunk metadata
+```

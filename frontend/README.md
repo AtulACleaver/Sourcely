@@ -27,8 +27,23 @@ React + Vite interface for interacting with the Sourcely research assistant.
 - **tailwind css**: utility-first styling.
 - **axios**: backend communication.
 
-## 📁 structure
+## 📁 Project Structure
 
-- `src/components`: ui elements like file upload and chat input.
-- `src/api`: api client for backend interaction.
-- `src/App.jsx`: main application layout and state.
+```text
+frontend/
+├── public/              # static assets
+├── src/
+│   ├── api/            # axios client & api calls
+│   ├── assets/         # images & styles
+│   ├── components/     # reusable ui components
+│   │   ├── AnswerDisplay.jsx
+│   │   ├── ChatInput.jsx
+│   │   ├── FileUpload.jsx
+│   │   └── StatusBar.jsx
+│   ├── App.jsx         # main application state & layout
+│   ├── index.css       # global styles
+│   └── main.jsx        # react entry point
+├── index.html          # html template
+├── package.json        # dependencies & scripts
+└── vite.config.js      # vite configuration
+```
