@@ -11,8 +11,8 @@ load_dotenv()
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
-def retrieve_context(question: str, session_id: str, k: int = 5) -> list[dict]:
-    results = search_index(question, session_id, k)
+def retrieve_context(question: str, k: int = 5) -> list[dict]:
+    results = search_index(question, k)
     return results
 
 
@@ -75,9 +75,9 @@ def parse_citations(answer: str, chunks: list[dict]) -> list[dict]:
 
     return citations
 
-def ask_question(question: str, session_id: str, k: int = 5) -> dict:
+def ask_question(question: str, k: int = 5) -> dict:
     """the full rag pipeline: retrieve, prompt, generate, and parse."""
-    retrieved = retrieve_context(question, session_id, k=k)
+    retrieved = retrieve_context(question, k=k)
 
     if not retrieved:
         return {

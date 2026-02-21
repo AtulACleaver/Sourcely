@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Header
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
@@ -42,11 +42,8 @@ def health():
     return {"message": "Sourcely is running!!"}
 
 @app.get("/status")
-def status(x_session_id: str = Header(None)):    
-    if not x_session_id:
-        return {"index_loaded": False, "num_chunks": 0}
-        
-    index, chunks = load_index(x_session_id)
+def status():    
+    index, chunks = load_index()
     return {
         "index_loaded": index is not None,
         "num_chunks": len(chunks) if chunks else 0
@@ -64,19 +61,14 @@ def status(x_session_id: str = Header(None)):
 """
 
 @app.post("/upload")
-async def upload_pdf(file: UploadFile = File(...), x_session_id: str = Header(None)):
-    if not x_session_id:
-        raise HTTPException(status_code=400, detail="Missing Session-Id header")
-
+async def upload_pdf(file: UploadFile = File(...)):
     try:
         # Check if the file is a PDF
         if not file.filename.endswith(".pdf"):
             raise HTTPException(status_code=400, detail="Only PDF files are allowed!!")
         
-        # Save the PDF file in session-specific directory
-        session_upload_dir = os.path.join(UPLOAD_DIR, x_session_id)
-        os.makedirs(session_upload_dir, exist_ok=True)
-        file_path = os.path.join(session_upload_dir, file.filename)
+        # Save the PDF file
+        file_path = os.path.join(UPLOAD_DIR, file.filename)
         logger.info(f"Saving uploaded file to {file_path}")
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
@@ -94,9 +86,9 @@ async def upload_pdf(file: UploadFile = File(...), x_session_id: str = Header(No
         logger.info(f"Chunking {len(pages)} pages")
         chunks = chunk_text(pages, chunk_size=500, overlap=100)
 
-        #  Embed and store in FAISS (session isolated)
-        logger.info(f"Building index for {len(chunks)} chunks in session {x_session_id}")
-        build_index(chunks, x_session_id)
+        #  Embed and store in FAISS
+        logger.info(f"Building index for {len(chunks)} chunks")
+        build_index(chunks)
         
         return {"filename": file.filename,
                 "status": "uploaded & chunked",
@@ -115,11 +107,9 @@ async def upload_pdf(file: UploadFile = File(...), x_session_id: str = Header(No
 
 
 @app.post("/query")
-def search(question: str, k: int = 5, x_session_id: str = Header(None)):
-    if not x_session_id:
-        raise HTTPException(status_code=400, detail="Missing Session-Id header")
-        
-    index, chunks = load_index(x_session_id)
+def search(question: str, k: int = 5):
+    
+    index, chunks = load_index()
 
     if index is None:
         raise HTTPException(
@@ -128,7 +118,7 @@ def search(question: str, k: int = 5, x_session_id: str = Header(None)):
         )
 
     try:
-        result = ask_question(question, x_session_id, k=k)
+        result = ask_question(question, k=k)
     except ConnectionError as e:
         raise HTTPException(status_code=503, detail=str(e))
     except Exception as e:

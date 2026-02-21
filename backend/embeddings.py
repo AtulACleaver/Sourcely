@@ -19,14 +19,8 @@ logger = logging.getLogger(__name__)
 VECTOR_STORE_DIR = "vector_store"
 os.makedirs(VECTOR_STORE_DIR, exist_ok=True)
 
-def get_session_paths(session_id: str):
-    """Generate paths for a specific session."""
-    session_dir = os.path.join(VECTOR_STORE_DIR, session_id)
-    os.makedirs(session_dir, exist_ok=True)
-    return {
-        "index": os.path.join(session_dir, "index.faiss"),
-        "chunks": os.path.join(session_dir, "chunks.json")
-    }
+INDEX_PATH = os.path.join(VECTOR_STORE_DIR, "index.faiss")
+CHUNKS_PATH = os.path.join(VECTOR_STORE_DIR, "chunks.json")
 
 
 
@@ -49,10 +43,8 @@ def get_embeddings(texts: list[str]) -> list[list[float]]:
         raise
 
 
-def build_index(chunks: list[dict], session_id: str) -> tuple:
-    """build and save a faiss index for the given chunks and session."""
-    
-    paths = get_session_paths(session_id)
+def build_index(chunks: list[dict]) -> tuple:
+    """build and save a faiss index for the given chunks."""
     
     print(f"Embedding {len(chunks)} chunks... This may take a minute.")
 
@@ -80,35 +72,35 @@ def build_index(chunks: list[dict], session_id: str) -> tuple:
     print(f"  FAISS index built with {index.ntotal} vectors")
 
     # Save FAISS index to disk
-    faiss.write_index(index, paths["index"])
+    faiss.write_index(index, INDEX_PATH)
+
     # save metadata to map results back to text
-    with open(paths["chunks"], "w") as f:
+    with open(CHUNKS_PATH, "w") as f:
         json.dump(chunks, f, indent=2)
 
-    print(f"  Saved index to {paths['index']}")
-    print(f"  Saved chunk metadata to {paths['chunks']}")
+    print(f"  Saved index to {INDEX_PATH}")
+    print(f"  Saved chunk metadata to {CHUNKS_PATH}")
 
     return index, chunks
 
 
-def load_index(session_id: str) -> tuple:
-    """load index and metadata from disk for a specific session."""
-    paths = get_session_paths(session_id)
+def load_index() -> tuple:
+    """load index and metadata from disk."""
 
-    if not os.path.exists(paths["index"]) or not os.path.exists(paths["chunks"]):
+    if not os.path.exists(INDEX_PATH) or not os.path.exists(CHUNKS_PATH):
         return None, None
 
-    index = faiss.read_index(paths["index"])
-    with open(paths["chunks"], "r") as f:
+    index = faiss.read_index(INDEX_PATH)
+    with open(CHUNKS_PATH, "r") as f:
         chunks = json.load(f)
 
     return index, chunks
 
 
-def search_index(query: str, session_id: str, k: int = 5) -> list[dict]:
-    """find the k most similar chunks for a query using session index."""
+def search_index(query: str, k: int = 5) -> list[dict]:
+    """find the k most similar chunks for a query."""
     
-    index, chunks = load_index(session_id)
+    index, chunks = load_index()
 
     if index is None:
         return []

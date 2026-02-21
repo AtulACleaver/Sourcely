@@ -1,11 +1,8 @@
-import { getSessionId } from '../utils/session'
+import axios from 'axios'
 
 // backend api instance
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
-  headers: {
-    'X-Session-Id': getSessionId()
-  }
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000'
 })
 
 
