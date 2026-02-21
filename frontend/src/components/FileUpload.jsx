@@ -1,5 +1,3 @@
-// src/components/FileUpload.jsx
-
 import { useState } from 'react'
 import { uploadPDF } from '../api/client'
 
@@ -71,8 +69,8 @@ export default function FileUpload({ onUploadSuccess }) {
       {uploading ? (
         <div className="flex flex-col items-center gap-2">
           <div className="w-6 h-6 border-3 border-gray-200 border-t-indigo-500 rounded-full animate-spin" />
-          <p className="text-gray-700 text-sm">Processing PDF... extracting, chunking, embedding</p>
-          <p className="text-xs text-gray-400">This can take 30-60 seconds depending on the file size.</p>
+          <p className="text-gray-700 text-sm">processing pdf...</p>
+          <p className="text-xs text-gray-400">extraction, chunking, and embedding can take a moment.</p>
         </div>
       ) : (
         <>

@@ -5,7 +5,7 @@ import os
 import logging
 import traceback
 
-# my py files
+# internal modules
 from extraction import extract_text
 from chunking import chunk_text
 from embeddings import build_index, load_index
@@ -98,10 +98,6 @@ async def upload_pdf(file: UploadFile = File(...)):
         logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
-
-    # Temporary search endpoint for testing.
-    # Takes a question, returns the top-k most similar chunks.
-    # This will be replaced by /query in Phase 2 (which adds LLM generation).
 
 @app.post("/query")
 def search(question: str, k: int = 5):

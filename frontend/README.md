@@ -1,16 +1,34 @@
-# React + Vite
+# 🎨 Sourcely Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite interface for interacting with the Sourcely research assistant.
 
-Currently, two official plugins are available:
+## 🚀 Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **install dependencies**:
 
-## React Compiler
+   ```bash
+   npm install
+   ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. **run development server**:
 
-## Expanding the ESLint configuration
+   ```bash
+   npm run dev
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3. **access the app**:
+
+   Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## 🛠️ tech stack
+
+- **react 19**: modern ui library.
+- **vite**: ultra-fast build tool.
+- **tailwind css**: utility-first styling.
+- **axios**: backend communication.
+
+## 📁 structure
+
+- `src/components`: ui elements like file upload and chat input.
+- `src/api`: api client for backend interaction.
+- `src/App.jsx`: main application layout and state.

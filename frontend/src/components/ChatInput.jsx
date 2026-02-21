@@ -1,5 +1,3 @@
-// src/components/ChatInput.jsx
-
 import { useState } from 'react'
 
 export default function ChatInput({ onAsk, disabled }) {

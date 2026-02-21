@@ -1,5 +1,3 @@
-// src/components/StatusBar.jsx
-
 import { useEffect, useState } from 'react'
 import { checkHealth, checkStatus } from '../api/client'
 
@@ -23,6 +21,7 @@ export default function StatusBar() {
       }
     }
     check()
+    // poll or check once on mount
   }, [])
 
   if (checking) {
@@ -54,4 +53,4 @@ export default function StatusBar() {
       )}
     </div>
   )
-}
+}w

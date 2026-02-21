@@ -52,7 +52,7 @@ def generate_answer(prompt: str) -> str:
                 "prompt": prompt,
                 "stream": False,
                 "options": {
-                    "temperature": 0.2 # lower num = less creative & more focused
+                    "temperature": 0.2 # lower temperature for more focused answers
                 }
             },
             timeout=300,
@@ -89,7 +89,7 @@ def parse_citations(answer: str, chunks: list[dict]) -> list[dict]:
     return citations
 
 def ask_question(question: str, k: int = 5) -> dict:
-    # step1: retrieve
+    """the full rag pipeline: retrieve, prompt, generate, and parse."""
     retrieved = retrieve_context(question, k=k)
 
     if not retrieved:
@@ -97,17 +97,13 @@ def ask_question(question: str, k: int = 5) -> dict:
             "answer": "No documents have been indexed yet. Upload a PDF File",
             "retrieved_chunks": []
         }
-    # step2: build prompt
+
     prompt = build_prompt(question, retrieved)
-
-    # step3: generate answer
     answer = generate_answer(prompt)
-
-    # step4: parse citations
     citations = parse_citations(answer, retrieved)
 
     return {
         "answer": answer,
         "citations": citations,
         "retrieved_chunks": retrieved
-    }
+    }ww

@@ -1,22 +1,5 @@
-
-"""
-    Takes extracted pages and splits them into overlapping chunks.
-
-    Args:
-        pages: Output from extract_text() - list of {"page_number": int, "text": str}
-        chunk_size: Max characters per chunk (default 500)
-        overlap: Characters shared between consecutive chunks (default 100)
-
-    Returns:
-        List of chunk dicts, each with:
-        - "chunk_id": int (unique, 0-indexed)
-        - "text": str (the chunk content)
-        - "page_number": int (which page this chunk came from)
-        - "start_char": int (where in the page this chunk starts)
-"""
-
-
 def chunk_text(pages: list[dict], chunk_size: int = 500, overlap: int = 100) -> list[dict]:
+    """split extracted pages into overlapping chunks for better retrieval."""
     chunks = []
     chunk_id = 0
 

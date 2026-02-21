@@ -10,139 +10,63 @@ An AI-powered research assistant that allows users to upload PDF documents and a
 
 ## ✨ Features
 
-- **📂 PDF Upload & Processing**: Seamlessly upload and extract text from local PDF files.
-- **✂️ Intelligent Chunking**: Automatically breaks down large documents into manageable segments for precise retrieval.
-- **🔍 Vector-Based Search**: Uses FAISS for high-performance similarity search within document embeddings.
-- **💬 RAG Question Answering**: Get LLM-generated answers based strictly on the context of your uploaded documents.
-- **📍 Precise Citations**: Every answer includes citations pointing back to the specific chunks used for the response.
-- **⚡ Real-time Feedback**: Live status updates during the PDF processing pipeline.
+- **📂 smart parsing**: extract text from pdf documents.
+- **🔍 vector search**: high-performance document retrieval using faiss.
+- **💬 ai answers**: answers questions using local ollama models.
+- **📍 citations**: provides source citations for every answer.
 
-## 🎯 How It Works
-
-### The Sourcely Processing Pipeline
+## 🏗️ Architecture Overview
 
 ```mermaid
-graph TD
-    A[User Uploads PDF] --> B[Text Extraction]
-    B --> C[Text Chunking]
-    C --> D[Embedding Generation]
-    D --> E[FAISS Index Building]
-    E --> F[Ready for Queries]
-    
-    G[User Asks Question] --> H[Question Embedding]
-    H --> I[Similarity Search in FAISS]
-    I --> J[Retrieve Relevant Chunks]
-    J --> K[LLM Response Generation]
-    K --> L[Answer with Citations]
-    
-    subgraph "PDF Ingestion"
-    B
-    C
-    D
-    E
+flowchart TB
+    subgraph Frontend["React + Vite (Port 5173)"]
+        A["FileUpload.jsx"] --> B["api/client.js (Axios)"]
+        C["ChatInput.jsx"] --> B
+        B --> D["AnswerDisplay.jsx"]
     end
     
-    subgraph "Query Handling"
-    H
-    I
-    J
-    K
+    subgraph Backend["FastAPI (Port 8000)"]
+        E["/upload endpoint"] --> F["extraction.py"]
+        F --> G["chunking.py"]
+        G --> H["embeddings.py"]
+        I["/query endpoint"] --> J["FAISS Search"]
+        J --> K["Prompt Builder"]
+        K --> L["LLM Generation"]
     end
+    
+    subgraph Storage["Local Storage"]
+        M["uploads/ (PDFs)"]
+        N["vector_store/ (FAISS + JSON)"]
+    end
+    
+    subgraph Models["AI Models"]
+        O["Ollama: nomic-embed-text"]
+        P["Ollama: llama3"]
+        Q["OpenAI (optional upgrade)"]
+    end
+    
+    B -->|"HTTP requests"| E
+    B -->|"HTTP requests"| I
+    H --> N
+    H --> O
+    L --> P
+    L -.->|"later"| Q
+    E --> M
+    J --> N
 ```
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
-### Prerequisites
+The project is split into two main parts. Follow the instructions in each directory:
 
-- Python 3.10+
-- Node.js 18+
-- Ollama (running locally with your preferred model, e.g., llama3)
-
-### Backend Setup
-
-1. **Navigate to the backend directory:**
-   ```bash
-   cd backend
-   ```
-
-2. **Create and activate a virtual environment:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Configure environment variables:**
-   Create a `.env` file in the `backend/` directory:
-   ```env
-   # Add any required configuration here
-   ```
-
-5. **Run the FastAPI server:**
-   ```bash
-   python main.py
-   ```
-   The API will be available at `http://localhost:8000`
-
-### Frontend Setup
-
-1. **Navigate to the frontend directory:**
-   ```bash
-   cd frontend
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-   The application will be available at `http://localhost:5173`
-
-## 📁 Project Structure
-
-```text
-Sourcely/
-├── backend/
-│   ├── main.py             # FastAPI entry point & routes
-│   ├── extraction.py       # PDF text extraction logic
-│   ├── chunking.py         # Text segmentation strategies
-│   ├── embeddings.py       # FAISS index & embedding utilities
-│   ├── generation.py       # RAG logic & LLM interaction
-│   ├── requirements.txt    # Python dependencies
-│   └── uploads/            # Temporary storage for PDFs
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx         # Main UI & routing
-│   │   ├── components/     # Reusable UI components
-│   │   ├── api/            # API client services
-│   │   └── assets/         # Images & styles
-│   ├── package.json        # Frontend dependencies
-│   └── vite.config.js      # Vite configuration
-└── README.md
-```
-
-## 🔌 API Endpoints
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| GET | `/health` | Check if the service is running |
-| GET | `/status` | Check the current status of the index |
-| POST | `/upload` | Upload and process a PDF file |
-| POST | `/query` | Ask a question based on indexed content |
+- [Backend Setup](./backend/README.md) - python, fastapi, and ollama.
+- [Frontend Setup](./frontend/README.md) - react, vite, and tailwind.
 
 ## 💻 Tech Stack
 
-- **Backend**: FastAPI, PDFMiner, FAISS, LangChain (or custom RAG logic)
-- **Frontend**: React 19, Vite, Tailwind CSS, Axios
-- **LLM**: Powered by Ollama (local inference)
+- **backend**: fastapi, pdfminer, faiss, langchain.
+- **frontend**: react 19, vite, tailwind css, axios.
+- **llm**: local inference powered by ollama.
 
 ## 💡 Troubleshooting
 

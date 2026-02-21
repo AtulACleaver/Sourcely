@@ -1,5 +1,3 @@
-# backend/embeddings.py
-
 import requests
 import numpy as np
 import faiss
@@ -10,7 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-# --- Directory for storing the FAISS index and chunk metadata ---
+# store index and metadata locally
 VECTOR_STORE_DIR = "vector_store"
 os.makedirs(VECTOR_STORE_DIR, exist_ok=True)
 
@@ -19,20 +17,8 @@ CHUNKS_PATH = os.path.join(VECTOR_STORE_DIR, "chunks.json")
 
 
 
-# Sends text to Ollama's local API and gets back an embedding vector.
-
-# Args:
-#     text: Any string you want to embed
-#     prefix: Task prefix required by nomic-embed-text.
-#             Use "search_document: " when embedding chunks (documents).
-#             Use "search_query: " when embedding questions (queries).
-#             Without these prefixes, all embeddings will be nearly identical
-#             and FAISS will just return chunks in order (0, 1, 2...).
-
-# Returns:
-#     A list of floats (the embedding vector, 768 dimensions for nomic-embed-text)
-
 def get_embedding(text: str, prefix: str = "") -> list[float]:
+    """get vector embedding from ollama with the required prefix."""
 
     logger.info(f"Getting embedding for text (prefix: {prefix})")
     response = requests.post(
@@ -48,21 +34,8 @@ def get_embedding(text: str, prefix: str = "") -> list[float]:
     return response.json()["embedding"]
 
 
-    # Takes a list of text chunks, embeds each one, and stores them in FAISS.
-
-    # This function does 3 things:
-    # 1. Calls get_embedding() on every chunk's text (with "search_document: " prefix)
-    # 2. Builds a FAISS index from all the embeddings
-    # 3. Saves the index and chunk metadata to disk
-
-    # Args:
-    #     chunks: Output from chunk_text() - list of dicts with "chunk_id", "text", etc.
-
-    # Returns:
-    #     Tuple of (faiss_index, chunks_with_embeddings)
-
-
 def build_index(chunks: list[dict]) -> tuple:
+    """build and save a faiss index for the given chunks."""
     
     print(f"Embedding {len(chunks)} chunks... This may take a minute.")
 
@@ -83,9 +56,7 @@ def build_index(chunks: list[dict]) -> tuple:
     dimension = embedding_matrix.shape[1]
     print(f"  Embedding dimension: {dimension}")
 
-    # Create the FAISS index
-    # IndexFlatL2 = brute force search using L2 (Euclidean) distance
-    # "Flat" means it checks every single vector. Fast enough for thousands of chunks.
+    # brute force search using l2 distance
     index = faiss.IndexFlatL2(dimension)
     index.add(embedding_matrix)
     print(f"  FAISS index built with {index.ntotal} vectors")
@@ -93,8 +64,7 @@ def build_index(chunks: list[dict]) -> tuple:
     # Save FAISS index to disk
     faiss.write_index(index, INDEX_PATH)
 
-    # Save chunk metadata to disk (we need this to map search results back to text)
-    # NOTE: We do NOT save the embeddings in chunks.json - they're in the FAISS index
+    # save metadata to map results back to text
     with open(CHUNKS_PATH, "w") as f:
         json.dump(chunks, f, indent=2)
 
@@ -104,13 +74,8 @@ def build_index(chunks: list[dict]) -> tuple:
     return index, chunks
 
 
-# Loads a previously saved FAISS index and chunk metadata from disk.
-
-# Returns:
-#     Tuple of (faiss_index, chunks) or (None, None) if no index exists
-
-
 def load_index() -> tuple:
+    """load index and metadata from disk."""
 
     if not os.path.exists(INDEX_PATH) or not os.path.exists(CHUNKS_PATH):
         return None, None
@@ -122,16 +87,8 @@ def load_index() -> tuple:
     return index, chunks
 
 
-# Searches the FAISS index for chunks most similar to the query.
-
-# Args:
-#     query: The question/search text
-#     k: Number of results to return (default 5)
-
-# Returns:
-#     List of dicts with chunk data + similarity distance
-
 def search_index(query: str, k: int = 5) -> list[dict]:
+    """find the k most similar chunks for a query."""
     
     index, chunks = load_index()
 

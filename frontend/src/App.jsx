@@ -1,5 +1,3 @@
-// src/App.jsx
-
 import { useState } from 'react'
 import StatusBar from './components/StatusBar'
 import FileUpload from './components/FileUpload'
@@ -15,6 +13,7 @@ export default function App() {
   const [error, setError] = useState('')
 
   const handleUploadSuccess = (data) => {
+    // reset state on new upload
     setUploadedFile(data)
     setAnswer(null)
     setCitations([])
@@ -22,6 +21,7 @@ export default function App() {
   }
 
   const handleAsk = async (question) => {
+    // call backend query endpoint
     setLoading(true)
     setError('')
     setAnswer(null)

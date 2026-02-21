@@ -1,5 +1,3 @@
-// src/components/AnswerDisplay.jsx
-
 export default function AnswerDisplay({ answer, citations, loading }) {
   if (loading) {
     return (
@@ -14,7 +12,7 @@ export default function AnswerDisplay({ answer, citations, loading }) {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Answer box */}
+      {/* main answer */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
         <h3 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
           Answer
@@ -22,7 +20,7 @@ export default function AnswerDisplay({ answer, citations, loading }) {
         <p className="text-base leading-7 text-gray-900">{answer}</p>
       </div>
 
-      {/* Citations */}
+      {/* citation list */}
       {citations.length > 0 && (
         <div className="bg-white border border-gray-200 rounded-xl p-5">
           <h4 className="text-xs uppercase tracking-wide text-gray-400 mb-3">

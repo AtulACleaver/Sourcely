@@ -1,6 +1,6 @@
 import pdfplumber
 
-# extract text from pdf file
+# extract text from a pdf file
 def extract_text(pdf_path: str) -> list[dict]:
 
     pages = []
