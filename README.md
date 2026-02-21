@@ -15,25 +15,39 @@ An AI-powered research assistant that allows users to upload PDF documents and a
 - **💬 ai answers**: answers questions using local ollama models.
 - **📍 citations**: provides source citations for every answer.
 
-## 🏗️ Architecture Overview
+## 🎯 How it works
+
+---
+
+### The Sourcely Processing Pipeline
 
 ```mermaid
-lowchart LR
-    subgraph Frontend["React + Vite (5173)"]
-        A["Upload PDF"] --> B["Axios Client"]
-        C["Ask Question"] --> B
+graph TD
+    A[User Uploads PDF] --> B[Text Extraction]
+    B --> C[Text Chunking]
+    C --> D[Embedding Generation]
+    D --> E[FAISS Index Building]
+    E --> F[Ready for Queries]
+    
+    G[User Asks Question] --> H[Question Embedding]
+    H --> I[Similarity Search in FAISS]
+    I --> J[Retrieve Relevant Chunks]
+    J --> K[LLM Response Generation]
+    K --> L[Answer with Citations]
+    
+    subgraph "PDF Ingestion"
+    B
+    C
+    D
+    E
     end
-
-    subgraph Backend["FastAPI (8000)"]
-        D["Extract + Chunk"] --> E["Embed (Ollama)"]
-        E --> F["FAISS Index"]
-        F --> G["Build Prompt"]
-        G --> H["LLM Answer"]
+    
+    subgraph "Query Handling"
+    H
+    I
+    J
+    K
     end
-
-    B -->|"/upload"| D
-    B -->|"/query"| F
-    H -->|"Answer + Citations"| B
 ```
 
 ## 🚀 Getting Started
