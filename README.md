@@ -9,8 +9,9 @@ An AI-powered research assistant that allows users to upload PDF documents and a
 ![FAISS](https://img.shields.io/badge/FAISS-1.13.2-yellow)
 
 ## 📸 Preview
+[Watch the Sourcely Walkthrough](https://www.youtube.com/watch?v=6dAWVoC30Lk)
 
-![Sourcely App Screenshot](./assets/preview.png)
+[![Watch the Sourcely Walkthrough](https://img.youtube.com/vi/6dAWVoC30Lk/maxresdefault.jpg)](https://www.youtube.com/watch?v=6dAWVoC30Lk)
 
 ## ✨ Features
 
