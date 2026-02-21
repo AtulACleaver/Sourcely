@@ -8,6 +8,10 @@ An AI-powered research assistant that allows users to upload PDF documents and a
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.129-green)
 ![FAISS](https://img.shields.io/badge/FAISS-1.13.2-yellow)
 
+## 📸 Preview
+
+![Sourcely App Screenshot](./assets/preview.png)
+
 ## ✨ Features
 
 - **📂 smart parsing**: extract text from pdf documents.
