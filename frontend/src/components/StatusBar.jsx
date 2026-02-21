@@ -46,11 +46,7 @@ export default function StatusBar() {
         }`}
       />
       {backendUp ? 'Backend connected' : 'Backend not connected'}
-      {indexInfo && indexInfo.index_loaded && (
-        <span className="text-gray-500">
-          · {indexInfo.num_chunks} chunks indexed
-        </span>
-      )}
+
     </div>
   )
 }
