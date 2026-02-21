@@ -1,13 +1,14 @@
-import requests
 from embeddings import search_index
 import os
 from dotenv import load_dotenv
 import re
+from groq import Groq
+
 
 load_dotenv()
 
-OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").strip().strip('"').strip("'")
-GENERATIONAL_MODEL = os.getenv("GENERATIONAL_MODEL", "mistral").strip().strip('"').strip("'")
+# Initialize Groq client
+groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
 def retrieve_context(question: str, k: int = 5) -> list[dict]:
@@ -44,30 +45,16 @@ def build_prompt(question: str, chunks: list[dict]) -> str:
     return prompt
 
 def generate_answer(prompt: str) -> str:
+    """Generate an answer using Groq's mistral-saba-24b model."""
     try:
-        response = requests.post(
-            f"{OLLAMA_BASE_URL}/api/generate",
-            json={
-                "model": GENERATIONAL_MODEL,
-                "prompt": prompt,
-                "stream": False,
-                "options": {
-                    "temperature": 0.2 # lower temperature for more focused answers
-                }
-            },
-            timeout=300,
+        response = groq_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2
         )
-        response.raise_for_status()
-        return response.json()["response"]
-        
-    except requests.exceptions.ConnectionError:
-        raise ConnectionError(
-            "Can't connect to Ollama. Check server running!!"
-        )
-    except KeyError:
-        raise Exception(
-            f"Unexpected response from Ollama: {response.text[:200]}"
-        )
+        return response.choices[0].message.content
+    except Exception as e:
+        raise Exception(f"Groq API error: {str(e)}")
 
 def parse_citations(answer: str, chunks: list[dict]) -> list[dict]:
     cited_ids_raw = re.findall(r'\[Chunk (\d+)\]', answer)

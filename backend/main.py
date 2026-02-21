@@ -4,6 +4,10 @@ import shutil
 import os
 import logging
 import traceback
+from dotenv import load_dotenv
+
+# load environment variables
+load_dotenv()
 
 # internal modules
 from extraction import extract_text
@@ -21,7 +25,10 @@ app = FastAPI(title="Sourcely API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://sourcely-rag.vercel.app/"  # add after deploying frontend
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -1,9 +1,16 @@
-import requests
 import numpy as np
 import faiss
 import json
 import os
 import logging
+from mistralai import Mistral
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+# Initialize Mistral client
+mistral_client = Mistral(api_key=os.getenv("MISTRAL_API_KEY"))
 
 logger = logging.getLogger(__name__)
 
@@ -17,21 +24,23 @@ CHUNKS_PATH = os.path.join(VECTOR_STORE_DIR, "chunks.json")
 
 
 
-def get_embedding(text: str, prefix: str = "") -> list[float]:
-    """get vector embedding from ollama with the required prefix."""
+def get_embedding(text: str) -> list[float]:
+    """Get vector embedding for a single text."""
+    return get_embeddings([text])[0]
 
-    logger.info(f"Getting embedding for text (prefix: {prefix})")
-    response = requests.post(
-        "http://localhost:11434/api/embeddings",
-        json={
-            "model": "nomic-embed-text",
-            "prompt": prefix + text
-        }
-    )
-    if response.status_code != 200:
-        logger.error(f"Ollama API error: {response.status_code} - {response.text}")
-    response.raise_for_status()  # Raises an error if Ollama isn't running
-    return response.json()["embedding"]
+
+def get_embeddings(texts: list[str]) -> list[list[float]]:
+    """Get vector embeddings for a list of texts (batch processing)."""
+    logger.info(f"Getting embeddings for batch of {len(texts)} texts")
+    try:
+        response = mistral_client.embeddings.create(
+            model="mistral-embed",
+            inputs=texts
+        )
+        return [item.embedding for item in response.data]
+    except Exception as e:
+        logger.error(f"Mistral API error: {str(e)}")
+        raise
 
 
 def build_index(chunks: list[dict]) -> tuple:
@@ -40,14 +49,15 @@ def build_index(chunks: list[dict]) -> tuple:
     print(f"Embedding {len(chunks)} chunks... This may take a minute.")
 
     embeddings = []
-    for i, chunk in enumerate(chunks):
-        # IMPORTANT: "search_document: " prefix tells nomic this is a document chunk
-        emb = get_embedding(chunk["text"], prefix="search_document: ")
-        embeddings.append(emb)
-
-        # Progress indicator (prints to your terminal)
-        if (i + 1) % 10 == 0 or i == 0:
-            print(f"  Embedded {i + 1}/{len(chunks)} chunks")
+    batch_size = 50  # Mistral supports up to 128 inputs per request
+    
+    for i in range(0, len(chunks), batch_size):
+        batch = chunks[i : i + batch_size]
+        batch_texts = [chunk["text"] for chunk in batch]
+        
+        print(f"  Embedding batch {i//batch_size + 1}/{(len(chunks)-1)//batch_size + 1}...")
+        batch_embeddings = get_embeddings(batch_texts)
+        embeddings.extend(batch_embeddings)
 
     # Convert to numpy array (FAISS requires float32)
     embedding_matrix = np.array(embeddings).astype("float32")
@@ -95,8 +105,8 @@ def search_index(query: str, k: int = 5) -> list[dict]:
     if index is None:
         return []
 
-    # IMPORTANT: "search_query: " prefix tells nomic this is a search query
-    query_embedding = np.array([get_embedding(query, prefix="search_query: ")]).astype("float32")
+    # get query embedding
+    query_embedding = np.array([get_embedding(query)]).astype("float32")
 
     # Search FAISS - returns distances and indices of closest vectors
     distances, indices = index.search(query_embedding, k)

@@ -21,10 +21,10 @@ FastAPI server for document processing and RAG-based questioning.
 
    Create a `.env` file:
 
-   ```env
-   OLLAMA_BASE_URL=http://localhost:11434
-   GENERATIONAL_MODEL=llama3
-   ```
+    ```env
+    MISTRAL_API_KEY=your_mistral_api_key_here
+    GROQ_API_KEY=your_groq_api_key_here
+    ```
 
 4. **run the server**:
 
@@ -34,13 +34,11 @@ FastAPI server for document processing and RAG-based questioning.
 
 ## 🔍 requirements
 
-- **ollama**: ensure ollama is running locally.
-- **models**: pull the required models:
-
-  ```bash
-  ollama pull nomic-embed-text
-  ollama pull llama3
-  ```
+- **mistral api**: you need a valid `MISTRAL_API_KEY` for embeddings.
+- **groq api**: you need a valid `GROQ_API_KEY` for generation.
+- **models**: 
+  - Embeddings: `mistral-embed` (handled via API)
+  - Generation: `llama-3.3-70b-versatile` (handled via Groq API)
 
 ## 🔌 endpoints
 

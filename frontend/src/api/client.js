@@ -1,5 +1,3 @@
-// src/api/client.js
-
 import axios from 'axios'
 
 // backend api instance
