@@ -1,11 +1,10 @@
 import pdfplumber
 
-# extract text from a pdf file
-def extract_text(pdf_path: str) -> list[dict]:
 
+def extract_text(pdf_stream) -> list[dict]:
+    """Extract text from a PDF file-like object (e.g. BytesIO)."""
     pages = []
-    
-    with pdfplumber.open(pdf_path) as pdf:
+    with pdfplumber.open(pdf_stream) as pdf:
         for i, page in enumerate(pdf.pages):
             text = page.extract_text()
             if text and text.strip():

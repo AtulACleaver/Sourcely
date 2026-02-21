@@ -42,21 +42,22 @@ FastAPI server for document processing and RAG-based questioning.
 
 ## 🔌 endpoints
 
-- `POST /upload`: upload and index a pdf.
-- `POST /query`: ask questions about indexed documents.
-- `GET /status`: check the current index state.
+- `POST /session`: create a new session; returns `session_id`. Use this on app load.
+- `POST /upload`: upload and index a PDF (query param: `session_id`). No disk write; state is in memory per session.
+- `POST /query`: ask questions about the document for the given session (query params: `question`, `session_id`).
+- `GET /status`: optional `session_id` for per-session index state.
+- `GET /health`: health check.
 
 ## 📁 Project Structure
 
 ```text
 backend/
 ├── main.py             # fastapi entry point & routes
-├── extraction.py       # pdf text extraction logic
+├── session_store.py    # in-memory session state (chunks, FAISS index)
+├── extraction.py       # pdf text extraction (stream-based)
 ├── chunking.py         # text segmentation strategies
-├── embeddings.py       # faiss index & embedding utilities
+├── embeddings.py       # embeddings & in-memory FAISS index build
 ├── generation.py       # rag logic & llm interaction
 ├── requirements.txt    # python dependencies
-├── .env                # environment variables (local only)
-├── uploads/            # temporary storage for pdfs
-└── vector_store/       # faiss index & chunk metadata
+└── .env                # environment variables (local only)
 ```

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { checkHealth, checkStatus } from '../api/client'
 
-export default function StatusBar() {
+export default function StatusBar({ sessionId }) {
   const [backendUp, setBackendUp] = useState(false)
   const [indexInfo, setIndexInfo] = useState(null)
   const [checking, setChecking] = useState(true)
@@ -11,9 +11,10 @@ export default function StatusBar() {
       try {
         await checkHealth()
         setBackendUp(true)
-
-        const statusRes = await checkStatus()
-        setIndexInfo(statusRes.data)
+        if (sessionId) {
+          const statusRes = await checkStatus(sessionId)
+          setIndexInfo(statusRes.data)
+        }
       } catch {
         setBackendUp(false)
       } finally {
@@ -21,8 +22,7 @@ export default function StatusBar() {
       }
     }
     check()
-    // poll or check once on mount
-  }, [])
+  }, [sessionId])
 
   if (checking) {
     return (

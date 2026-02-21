@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { uploadPDF } from '../api/client'
 
-export default function FileUpload({ onUploadSuccess }) {
+export default function FileUpload({ sessionId, onUploadSuccess }) {
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -9,6 +9,10 @@ export default function FileUpload({ onUploadSuccess }) {
 
   const handleFile = async (file) => {
     if (!file) return
+    if (!sessionId) {
+      setError('Session not ready. Please wait.')
+      return
+    }
 
     if (!file.name.endsWith('.pdf')) {
       setError('Only PDF files are accepted.')
@@ -21,9 +25,10 @@ export default function FileUpload({ onUploadSuccess }) {
     setUploading(true)
 
     try {
-      const res = await uploadPDF(file)
+      const res = await uploadPDF(file, sessionId)
+      const pages = res.data.num_pages_extracted ?? res.data.num_chunks
       setMessage(
-        `${res.data.filename} - ${res.data.num_pages} pages, ${res.data.num_chunks} chunks indexed`
+        `${res.data.filename} - ${pages} pages, ${res.data.num_chunks} chunks indexed`
       )
       onUploadSuccess(res.data)
     } catch (err) {

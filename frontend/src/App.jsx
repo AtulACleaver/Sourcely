@@ -1,19 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import StatusBar from './components/StatusBar'
 import FileUpload from './components/FileUpload'
 import ChatInput from './components/ChatInput'
 import AnswerDisplay from './components/AnswerDisplay'
-import { askQuestion } from './api/client'
+import { askQuestion, createSession } from './api/client'
 
 export default function App() {
+  const [sessionId, setSessionId] = useState(null)
   const [uploadedFile, setUploadedFile] = useState(null)
   const [answer, setAnswer] = useState(null)
   const [citations, setCitations] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  useEffect(() => {
+    createSession()
+      .then((res) => setSessionId(res.data.session_id))
+      .catch(() => setSessionId(null))
+  }, [])
+
   const handleUploadSuccess = (data) => {
-    // reset state on new upload
     setUploadedFile(data)
     setAnswer(null)
     setCitations([])
@@ -21,14 +27,13 @@ export default function App() {
   }
 
   const handleAsk = async (question) => {
-    // call backend query endpoint
     setLoading(true)
     setError('')
     setAnswer(null)
     setCitations([])
 
     try {
-      const res = await askQuestion(question)
+      const res = await askQuestion(question, sessionId)
       setAnswer(res.data.answer)
       setCitations(res.data.citations)
     } catch (err) {
@@ -41,7 +46,7 @@ export default function App() {
 
   return (
     <div className="max-w-2xl mx-auto px-5 py-5 min-h-screen">
-      <StatusBar />
+      <StatusBar sessionId={sessionId} />
 
       <header className="text-center pt-10 pb-5">
         <h1 className="text-3xl font-bold text-gray-900">Sourcely</h1>
@@ -51,7 +56,10 @@ export default function App() {
       </header>
 
       <main className="flex flex-col gap-5 pt-5">
-        <FileUpload onUploadSuccess={handleUploadSuccess} />
+        <FileUpload
+          sessionId={sessionId}
+          onUploadSuccess={handleUploadSuccess}
+        />
 
         {uploadedFile && (
           <p className="text-sm text-gray-600 text-center">
@@ -62,7 +70,7 @@ export default function App() {
 
         <ChatInput
           onAsk={handleAsk}
-          disabled={!uploadedFile || loading}
+          disabled={!sessionId || !uploadedFile || loading}
         />
 
         {error && (

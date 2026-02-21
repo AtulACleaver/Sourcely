@@ -1,4 +1,3 @@
-from embeddings import search_index
 import os
 from dotenv import load_dotenv
 import re
@@ -7,13 +6,7 @@ from groq import Groq
 
 load_dotenv()
 
-# Initialize Groq client
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
-
-def retrieve_context(question: str, k: int = 5) -> list[dict]:
-    results = search_index(question, k)
-    return results
 
 
 def build_prompt(question: str, chunks: list[dict]) -> str:
@@ -75,22 +68,19 @@ def parse_citations(answer: str, chunks: list[dict]) -> list[dict]:
 
     return citations
 
-def ask_question(question: str, k: int = 5) -> dict:
-    """the full rag pipeline: retrieve, prompt, generate, and parse."""
-    retrieved = retrieve_context(question, k=k)
-
-    if not retrieved:
+def ask_question_with_chunks(question: str, retrieved_chunks: list[dict]) -> dict:
+    """RAG pipeline using pre-retrieved chunks: prompt, generate, parse."""
+    if not retrieved_chunks:
         return {
-            "answer": "No documents have been indexed yet. Upload a PDF File",
-            "retrieved_chunks": []
+            "answer": "No documents have been indexed yet. Upload a PDF first.",
+            "retrieved_chunks": [],
+            "citations": []
         }
-
-    prompt = build_prompt(question, retrieved)
+    prompt = build_prompt(question, retrieved_chunks)
     answer = generate_answer(prompt)
-    citations = parse_citations(answer, retrieved)
-
+    citations = parse_citations(answer, retrieved_chunks)
     return {
         "answer": answer,
         "citations": citations,
-        "retrieved_chunks": retrieved
+        "retrieved_chunks": retrieved_chunks
     }
