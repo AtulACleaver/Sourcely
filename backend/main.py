@@ -27,7 +27,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://sourcely-rag.vercel.app/"  # add after deploying frontend
+        "https://sourcely-rag.vercel.app"  # add after deploying frontend
     ],
     allow_methods=["*"],
     allow_headers=["*"],
