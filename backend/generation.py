@@ -6,8 +6,8 @@ import re
 
 load_dotenv()
 
-OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL")
-GENERATIONAL_MODEL = os.getenv("GENERATIONAL_MODEL")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").strip().strip('"').strip("'")
+GENERATIONAL_MODEL = os.getenv("GENERATIONAL_MODEL", "mistral").strip().strip('"').strip("'")
 
 
 def retrieve_context(question: str, k: int = 5) -> list[dict]:
