@@ -18,8 +18,8 @@ An AI-powered research assistant that allows users to upload PDF documents and a
 
 - **📂 smart parsing**: extract text from pdf documents.
 - **🔍 vector search**: high-performance document retrieval using faiss.
-- **💬 ai answers**: answers questions using local ollama models.
-- **📍 citations**: provides source citations for every answer.
+- **💬 ai answers**: answers questions using Groq's `llama-3.3-70b-versatile` model via context-only prompting.
+- **📍 citations**: every factual claim is cited with an exact `[Chunk X]` reference including page number.
 
 ## 🎯 How it works
 
@@ -60,19 +60,19 @@ graph TD
 
 The project is split into two main parts. Follow the instructions in each directory:
 
-- [Backend Setup](./backend/README.md) - python, fastapi, and ollama.
+- [Backend Setup](./backend/README.md) - python, fastapi, mistral, and groq.
 - [Frontend Setup](./frontend/README.md) - react, vite, and tailwind.
 
 ## 💻 Tech Stack
 
-- **backend**: fastapi, pdfminer, faiss, langchain.
+- **backend**: fastapi, pdfplumber, faiss-cpu, mistral-embed, groq.
 - **frontend**: react 19, vite, tailwind css, axios.
-- **llm**: local inference powered by ollama.
+- **llm**: cloud inference — embeddings via `mistral-embed`, generation via Groq `llama-3.3-70b-versatile`.
 
 ## 💡 Troubleshooting
 
 - **PDF Extraction Failed**: Ensure the PDF is not password-protected or purely image-based (OCR not currently supported).
-- **Ollama Connection Error**: Verify that Ollama is running (`ollama serve`) and the model is pulled (`ollama pull llama3`).
+- **API Errors**: Verify `MISTRAL_API_KEY` and `GROQ_API_KEY` are set correctly in `backend/.env`.
 - **Memory Issues**: Large PDFs may require significant RAM for embedding generation.
 
 ---
@@ -107,21 +107,6 @@ Retrieval was benchmarked across two dimensions — isolated FAISS vector search
 
 ---
 
-### 🎯 Citation Accuracy
-
-Validated against **200+ benchmark queries** spanning academic papers, technical reports, and multi-section documents.
-
-| Metric | Score |
-| --- | --- |
-| Citation-Grounded Accuracy | **85%** |
-| Hallucination Rate | < 10% |
-| Exact Page Match | 78% |
-| Partial/Adjacent Page Match | 92% |
-
-**Citation-Grounded Accuracy** — defined as: the fraction of answers where every factual claim maps to an explicitly retrieved chunk, verified by manual review across the 200+ query set.
-
----
-
 ### ⚙️ Configuration Used
 
 ```python
@@ -138,10 +123,12 @@ These defaults were tuned to balance recall (retrieving the right context) again
 
 ### 🧪 Methodology
 
-1. **Document corpus** — 15 documents across varied domains (research papers, legal docs, user manuals), ranging from 20–150 pages.
-2. **Query set** — 200+ questions written per-document, covering factual lookups, multi-hop reasoning, and edge-case phrasing.
-3. **Grading** — Each answer was scored on whether the cited page(s) contained the information used to construct the answer. Partial credit awarded for adjacent-page citations.
-4. **Latency measurement** — `time.perf_counter()` wrapping `get_embedding()` + `index.search()` calls. FAISS-only: 200 runs with synthetic unit vectors. E2E: 10 runs with real Mistral API calls. Reproduce with `backend/benchmark.py`.
+1. **Latency benchmark** (`backend/benchmark.py`) — Two passes:
+   - **FAISS-only**: 200 runs × 4 document scales using synthetic unit vectors (no API calls). Measures raw in-memory search speed.
+   - **End-to-end**: 10 runs × 4 document scales using real Mistral `mistral-embed` API calls + FAISS search. Measures realistic query latency.
+   - Timing via `time.perf_counter()` around `get_embedding()` + `index.search()`.
+2. **Citation architecture** — Context-only prompt enforces `[Chunk X]` citations and bans prior-knowledge use. Page numbers are returned directly from chunk metadata in every `/query` response.
+3. **Reproduce**: `cd backend && python benchmark.py`
 
 ## 📝 License
 
