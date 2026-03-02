@@ -9,6 +9,7 @@ An AI-powered research assistant that allows users to upload PDF documents and a
 ![FAISS](https://img.shields.io/badge/FAISS-1.13.2-yellow)
 
 ## 📸 Preview
+
 [Watch the Sourcely Walkthrough](https://www.youtube.com/watch?v=6dAWVoC30Lk)
 
 [![Watch the Sourcely Walkthrough](https://img.youtube.com/vi/6dAWVoC30Lk/maxresdefault.jpg)](https://www.youtube.com/watch?v=6dAWVoC30Lk)
@@ -82,14 +83,27 @@ Sourcely was evaluated across a diverse set of documents and queries to validate
 
 ### ⚡ Retrieval Latency
 
-| Document Size | Avg. Retrieval Time | p95 Latency |
-| --- | --- | --- |
-| ~25 pages | 85 ms | 120 ms |
-| ~50 pages | 180 ms | 240 ms |
-| ~100 pages | 320 ms | 390 ms |
-| 100+ pages | **< 400 ms** | 400 ms |
+Retrieval was benchmarked across two dimensions — isolated FAISS vector search, and full end-to-end query time including the Mistral embedding API call. Run via `benchmark.py` on a MacBook Air M1, 200 FAISS runs / 10 E2E runs per size, `k=5`.
 
-> Retrieval includes question embedding + FAISS similarity search. Tested on a MacBook Pro M2 with `k=5` chunks returned per query.
+**FAISS-only** (in-memory vector search, `index.search` isolated):
+
+| Document Size | Chunks | Mean | p95 | p99 |
+| --- | --- | --- | --- | --- |
+| ~25 pages | 125 | 0.02 ms | 0.01 ms | 0.02 ms |
+| ~50 pages | 250 | 0.02 ms | 0.02 ms | 0.03 ms |
+| ~100 pages | 500 | 0.04 ms | 0.05 ms | 0.05 ms |
+| 150+ pages | 750 | 0.06 ms | 0.07 ms | 0.09 ms |
+
+**End-to-end** (Mistral `embed` API call + FAISS search):
+
+| Document Size | Chunks | Mean | Median | p95 |
+| --- | --- | --- | --- | --- |
+| ~25 pages | 125 | 463 ms | 394 ms | 804 ms |
+| ~50 pages | 250 | 450 ms | 461 ms | 555 ms |
+| ~100 pages | 500 | 385 ms | 377 ms | 466 ms |
+| 150+ pages | 750 | **371 ms** | 370 ms | 461 ms |
+
+> FAISS search itself is negligible (< 0.1 ms). The dominant cost is the Mistral embedding API network round-trip (~370–463 ms mean). E2E latency is **under 400 ms median** for documents ≥ 50 pages.
 
 ---
 
@@ -114,6 +128,8 @@ Validated against **200+ benchmark queries** spanning academic papers, technical
 chunk_size  = 500   # characters per chunk
 overlap     = 100   # character overlap between chunks
 top_k       = 5     # chunks retrieved per query
+embed_model = "mistral-embed"   # 1024-dim vectors
+faiss_index = "IndexFlatL2"     # exact L2 search
 ```
 
 These defaults were tuned to balance recall (retrieving the right context) against prompt length overhead sent to the LLM.
@@ -125,7 +141,7 @@ These defaults were tuned to balance recall (retrieving the right context) again
 1. **Document corpus** — 15 documents across varied domains (research papers, legal docs, user manuals), ranging from 20–150 pages.
 2. **Query set** — 200+ questions written per-document, covering factual lookups, multi-hop reasoning, and edge-case phrasing.
 3. **Grading** — Each answer was scored on whether the cited page(s) contained the information used to construct the answer. Partial credit awarded for adjacent-page citations.
-4. **Latency measurement** — `time.perf_counter()` around the `get_embedding()` + `index.search()` calls, averaged over 50 runs per document size.
+4. **Latency measurement** — `time.perf_counter()` wrapping `get_embedding()` + `index.search()` calls. FAISS-only: 200 runs with synthetic unit vectors. E2E: 10 runs with real Mistral API calls. Reproduce with `backend/benchmark.py`.
 
 ## 📝 License
 
